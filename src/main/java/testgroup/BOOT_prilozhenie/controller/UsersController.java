@@ -27,6 +27,7 @@ public class UsersController {
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         modelMap.addAttribute("userPage", user);
+        modelMap.addAttribute("AorU", user.getUserRole().contains("ADMIN"));
         return "123";
     }
 
@@ -73,6 +74,7 @@ public class UsersController {
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
         modelMap.addAttribute("userPage", user);
+        modelMap.addAttribute("AorU", user.getUserRole().contains("ADMIN"));
         return "123";
     }
 

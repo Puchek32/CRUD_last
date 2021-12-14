@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en" class="h-100">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en" class="h-100">
 <head>
     <meta charset="UTF-8">
     <title>Users List</title>
@@ -9,7 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-
 <!-- СТИЛЬ ЧТОБЫ КНОПКА БЫЛА КАК НА СКРИНШОТАХ -->
 <style>
     .btn-info {
@@ -32,7 +31,6 @@
     }
 </style>
 <!-- стиль закончен  -->
-
 <body class="h-100 w-100 bg-light">
 
 <!--header -->
@@ -52,17 +50,18 @@
 
         <!--  создание дива типа строка, для релизации вложенности  -->
         <div class="row h-100 w-100">
-
             <!--    левый блок столбец (выбор страницы панели админа или юзера)-->
             <div class="col-md-2 d-flex flex-column flex-shrink-0 p-3 bg-white">
                 <ul class="nav nav-pills flex-column mb-auto">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin"
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="nav-link" th:classappend="${AorU} ? 'active' : ''"
+                           id="admin-tab" data-bs-toggle="tab" data-bs-target="#admin"
                            type="button" role="tab" aria-controls="admin" aria-selected="true">Admin
                         </a>
                     </li>
                     <li>
-                        <a class="nav-link " id="user-tab" data-bs-toggle="tab" data-bs-target="#user"
+                        <a class="nav-link" th:classappend="${AorU} ? '' : 'active'"
+                           id="user-tab" data-bs-toggle="tab" data-bs-target="#user"
                            type="button" role="tab" aria-controls="user" aria-selected="true">User
                         </a>
                     </li>
@@ -73,8 +72,9 @@
             <div class="tab-content col-md-10 text-left bg-light" id="123">
                 <!-- блок в блоке для грамотной разметки-->
                 <!-- блок с вкладлками, текст аллюзерс, таблица ( внутри таблицы модальные окна, вкладки юзер тэйбл и нью юзер) -->
-                <div class="tab-pane fade show active text-left  p-3" id="admin" role="tabpanel"
-                     aria-labelledby="admin-tab">
+                <div class="tab-pane fade show active text-left  p-3" th:classappend="${AorU} ? 'show active' : ''"
+                     id="admin" role="tabpanel"
+                     aria-labelledby="admin-tab" sec:authorize="hasRole('ROLE_ADMIN')">
                     <h1 style="color: black">Admin page</h1>
 
                     <!-- блок с вкладками  юзер тэйбл, нью юзер-->
@@ -219,35 +219,17 @@
                                                                            id="passwordModal"/>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label for="roleModal"
-                                                                           class="form-label">Role</label>
-                                                                    <select class="form-select" size="2" multiple
-                                                                            id="roleModal">
-                                                                        <option value="ROLE_ADMIN" th:name="ROLE_ADMIN"
-                                                                                id="ADMIN12">Admin
-                                                                        </option>
-                                                                        <option value="ROLE_USER" th:name="ROLE_USER"
-                                                                                id="USER12">User
-                                                                        </option>
-<!--                                                                        <label><b>Role</b></label>-->
-<!--                                                                        <div class="form-check form-switch"-->
-<!--                                                                             th:align="left">-->
-<!--                                                                            <input class="form-check-input"-->
-<!--                                                                                   th:name="ADMIN1" value="ADMIN1"-->
-<!--                                                                                   th:type="checkbox "-->
-<!--                                                                                   id="ADMIN1" disabled>-->
-<!--                                                                            <label class="form-check-label" for="ADMIN1"-->
-<!--                                                                                   align="left">Admin</label>-->
-<!--                                                                        </div>-->
-<!--                                                                        <div class="form-check form-switch"-->
-<!--                                                                             th:align="left">-->
-<!--                                                                            <input class="form-check-input"-->
-<!--                                                                                   th:name="USER1" value="USER1"-->
-<!--                                                                                   th:type="checkbox"-->
-<!--                                                                                   id="USER1" disabled>-->
-<!--                                                                            <label class="form-check-label" for="USER1">User</label>-->
-<!--                                                                        </div>-->
-                                                                    </select>
+                                                                    <label><b>Role</b></label>
+                                                                    <div class="form-check form-switch" th:align="left">
+                                                                        <input class="form-check-input"  th:id="1" th:name="ADMIN" th:value="ADMIN2" th:type="checkbox"
+                                                                               id="ADMIN2">
+                                                                        <label class="form-check-label" for="ADMIN2">Admin</label>
+                                                                    </div>
+                                                                    <div class="form-check form-switch" th:align="left">
+                                                                        <input class="form-check-input"  th:id="2" th:name="USER" th:value="USER2" th:type="checkbox"
+                                                                               id="USER2">
+                                                                        <label class="form-check-label" for="USER2">User</label>
+                                                                    </div>
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary"
@@ -359,20 +341,16 @@
                                                                                class="form-control"
                                                                                id="passwordModalDelete">
                                                                     </div>
-                                                                    <div class="mb-3">
-                                                                        <label for="roleModalDelete"
-                                                                               class="form-label">
-                                                                            Роль</label>
-                                                                        <select class="form-select" size="2"
-                                                                                multiple
-                                                                                id="roleModalDelete">
-                                                                            <option value="ADMIN1" th:name="ADMIN1"
-                                                                                    id="ADMIN1">User
-                                                                            </option>
-                                                                            <option value="USER1" th:name="USER1"
-                                                                                    id="USER1">Admin
-                                                                            </option>
-                                                                        </select>
+                                                                    <label><b>Role</b></label>
+                                                                    <div class="form-check form-switch" th:align="left">
+                                                                        <input class="form-check-input" th:name="ADMIN" value="ADMIN3" th:type="checkbox "
+                                                                               id="ADMIN3" disabled>
+                                                                        <label class="form-check-label" for="ADMIN3" align="left">Admin</label>
+                                                                    </div>
+                                                                    <div class="form-check form-switch" th:align="left">
+                                                                        <input class="form-check-input" th:name="USER" value="USER3" th:type="checkbox"
+                                                                               id="USER3" disabled>
+                                                                        <label class="form-check-label" for="USER3">User</label>
                                                                     </div>
                                                                 </fieldset>
                                                                 <div class="modal-footer">
@@ -454,12 +432,15 @@
                                            class="form-control"
                                            id="password">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="role" class="form-label">Role</label>
-                                    <select class="form-select" size="2" multiple id="role">
-                                        <option value="1">User</option>
-                                        <option value="2">Admin</option>
-                                    </select>
+                                <div class="form-check form-switch" th:align="left">
+                                    <input class="form-check-input" th:name="ADMIN" value="ADMIN" th:type="checkbox"
+                                           id="ADMIN1">
+                                    <label class="form-check-label" for="ADMIN" align="left">Admin</label>
+                                </div>
+                                <div class="form-check form-switch" th:align="left">
+                                    <input class="form-check-input" th:name="USER" value="USER" th:type="checkbox"
+                                           id="USER1">
+                                    <label class="form-check-label" for="USER">User</label>
                                 </div>
                                 <button type="submit" class="btn btn-success">Create</button>
                             </form>
@@ -467,7 +448,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade text-left p-3" id="user" role="tabpanel"
+                <div class="tab-pane fade text-left p-3" th:classappend="${AorU} ? '' : 'show active'"
+                     id="user" role="tabpanel"
                      aria-labelledby="user-tab">
                     <h1 style="color: black">User-information page</h1>
                     <div class="tab-content border" id="userTabContent">
