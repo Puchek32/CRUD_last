@@ -48,7 +48,7 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
+            joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
@@ -57,10 +57,10 @@ public class User implements UserDetails {
         boolean isUser = roles.stream().anyMatch(r -> r.getName().equals("ROLE_USER"));
 
         if (isAdmin && isUser) {
-            return "ROLE_ADMIN, ROLE_USER";
+            return "ADMIN, USER";
         }
 
-        return isAdmin ? "ROLE_ADMIN" : "ROLE_USER";
+        return isAdmin ? "ADMIN" : "USER";
     }
 
     @Override

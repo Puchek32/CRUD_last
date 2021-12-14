@@ -23,13 +23,17 @@ public class UsersController {
     @GetMapping(value = "/admin")
     public String allUsers(ModelMap modelMap) {
         modelMap.addAttribute("usersList", userService.allUsers());
-        return "adminPage";
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        modelMap.addAttribute("userPage", user);
+        return "123";
     }
 
     @GetMapping(value = "/admin/edit/{id}")
     public String editPage(ModelMap modelMap, @PathVariable("id") int id) {
-        modelMap.addAttribute("user", userService.getById(id));
-        return "editPage";
+        modelMap.addAttribute("userEdit", userService.getById(id));
+        return "123";
     }
 
     @PostMapping(value = "/admin/edit")
@@ -43,8 +47,8 @@ public class UsersController {
 
     @GetMapping(value = "/admin/add")
     public String addPage(ModelMap modelMap) {
-        modelMap.addAttribute("user", new User());
-        return "addPage";
+        modelMap.addAttribute("userAdd", new User());
+        return "123";
     }
 
     @PostMapping(value = "/admin/add")
@@ -56,7 +60,7 @@ public class UsersController {
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "/admin/delete/{id}")
+    @PostMapping(value = "/admin/delete/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         userService.delete(userService.getById(id));
         return "redirect:/admin";
@@ -68,8 +72,8 @@ public class UsersController {
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
-        modelMap.addAttribute("user", user);
-        return "user";
+        modelMap.addAttribute("userPage", user);
+        return "123";
     }
 
     private static Set<Role> kysochek(String ADMIN, String USER) {
