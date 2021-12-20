@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +21,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDao;
+
+    @Autowired
+    private RoleService roleService;
 
     @Override
     @Transactional
@@ -30,7 +34,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(User user) {
+            user.setRoles(user.getRoles().stream()
+                .map(r -> roleService.findByName(r.getName()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList()));
         userDao.add(user);
+
     }
 
     @Override
@@ -42,6 +52,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void edit(User user) {
+        user.setRoles(user.getRoles().stream()
+                .map(r -> roleService.findByName(r.getName()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList()));
         userDao.edit(user);
     }
 

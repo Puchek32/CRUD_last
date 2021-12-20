@@ -1,13 +1,12 @@
 package testgroup.BOOT_prilozhenie.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import testgroup.BOOT_prilozhenie.util.RoleListDeserializer;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
@@ -15,32 +14,32 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @Column
-    private String first_name;
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column
-    private String last_name;
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column
+    @Column(name = "age")
     private int age;
 
-    @Column
+    @Column(name = "job")
     private String job;
 
-    @Column
-    private String user_name;
+    @Column(name = "user_name")
+    private String userName;
 
-    @Column
+    @Column(name = "password")
     private String password;
 
     @Override
     public String toString() {
         return "User " +
                 "id: " + id +
-                ", firstName: " + first_name +
-                ", LastName: " + last_name +
+                ", firstName: " + firstName +
+                ", LastName: " + lastName +
                 ", age: " + age +
                 ", job: " + job + ";";
     }
@@ -50,6 +49,7 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JsonDeserialize(using = RoleListDeserializer.class)
     private Collection<Role> roles;
 
     public String getUserRole() {
@@ -75,7 +75,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user_name;
+        return userName;
     }
 
     @Override
@@ -106,20 +106,20 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String firstName) {
-        this.first_name = firstName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String last_name) {
+        this.lastName = last_name;
     }
 
     public int getAge() {
@@ -138,12 +138,12 @@ public class User implements UserDetails {
         this.job = job;
     }
 
-    public String getUser_name() {
-        return user_name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUser_name(String userName) {
-        this.user_name = userName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public void setPassword(String password) {
