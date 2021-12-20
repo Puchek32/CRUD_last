@@ -2,7 +2,6 @@ package testgroup.BOOT_prilozhenie.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
